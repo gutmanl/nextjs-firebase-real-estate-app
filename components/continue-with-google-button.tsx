@@ -9,7 +9,7 @@ export default function ContinueWithGoogleButton() {
         <Button onClick={() => {
             auth?.loginWithGoogle();
         }}
-        variant="outline">
+        variant="default" className="w-full">
             Continue with Google
         </Button>
     );

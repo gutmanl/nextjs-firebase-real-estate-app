@@ -1,5 +1,5 @@
-@import "tailwindcss/preflight";
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -63,45 +63,45 @@ body {
 
 @layer base {
   * {
-    @reference border-border;
+    @apply border-border;
   }
   body {
-    @reference bg-background text-foreground;
+    @apply bg-background text-foreground;
   }
 }
 
 .property-description h1 {
-  @reference text-5xl font-bold my-4;
+  @apply text-5xl font-bold my-4;
 }
 
 .property-description h2 {
-  @reference text-4xl font-bold my-4;
+  @apply text-4xl font-bold my-4;
 }
 
 .property-description h3 {
-  @reference text-3xl font-bold my-4;
+  @apply text-3xl font-bold my-4;
 }
 
 .property-description h4 {
-  @reference text-2xl font-bold my-4;
+  @apply text-2xl font-bold my-4;
 }
 
 .property-description h5 {
-  @reference text-xl font-bold my-4;
+  @apply text-xl font-bold my-4;
 }
 
 .property-description h6 {
-  @reference text-lg font-bold my-4;
+  @apply text-lg font-bold my-4;
 }
 
 .property-description p {
-  @reference my-4 font-normal text-base;
+  @apply my-4 font-normal text-base;
 }
 
 .property-description ul {
-  @reference list-disc my-4 ml-4;
+  @apply list-disc my-4 ml-4;
 }
 
 .property-description ol {
-  @reference list-decimal my-4 ml-4;
+  @apply list-decimal my-4 ml-4;
 }
