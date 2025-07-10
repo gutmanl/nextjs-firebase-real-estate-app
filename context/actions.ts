@@ -21,8 +21,6 @@ export const setToken = async ({
         if(!verifiedToken) {
             return;
         }
-        console.log(verifiedToken);
-
         const userRecord = await auth.getUser(verifiedToken.uid);
 
         if(process.env.ADMIN_EMAIL === userRecord.email && !userRecord.customClaims?.admin) {

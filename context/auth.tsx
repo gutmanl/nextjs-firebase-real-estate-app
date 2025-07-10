@@ -28,7 +28,6 @@ export const AuthProvider = ({children} :{
 
             if(user) {
                 const tokenResult = await user.getIdTokenResult();
-                console.log(tokenResult);
                 const token = tokenResult.token;
                 const refreshToken = user.refreshToken;
                 const claims = tokenResult.claims;
