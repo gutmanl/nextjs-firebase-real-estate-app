@@ -11,8 +11,10 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {Avatar, AvatarFallback} from "@/components/ui/avatar";
+import {useRouter} from "next/navigation";
 
 export default function AuthButtons() {
+    const router = useRouter();
     const auth = useAuth();
 
     return (
@@ -61,7 +63,10 @@ export default function AuthButtons() {
                             </Link>
                         </DropdownMenuItem>
                     )}
-                  <DropdownMenuItem onClick={async () => {await auth.logout()}}>Log Out
+                  <DropdownMenuItem onClick={async () => {
+                      await auth.logout();
+                      router.refresh();
+                  }}>Log Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

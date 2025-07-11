@@ -5,7 +5,7 @@ import PropertyForm from "@/components/property-form";
 import {propertyDataSchema} from "@/validation/propertySchema";
 import {PlusCircleIcon} from "lucide-react";
 import {useAuth} from "@/context/auth";
-import {saveNewProperty} from "@/app/admin-dashboard/new/actions";
+import {createProperty} from "@/app/admin-dashboard/new/actions";
 import {toast} from "sonner";
 import {useRouter} from "next/navigation";
 
@@ -20,8 +20,8 @@ export default function NewPropertyForm() {
             return;
         }
 
-        const response = await saveNewProperty({
-            ...data, token})
+        const response = await createProperty({
+            ...data}, token)
 
         if(!!response.error) {
             toast.error("Error!", {

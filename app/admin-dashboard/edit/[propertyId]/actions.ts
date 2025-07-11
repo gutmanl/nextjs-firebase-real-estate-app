@@ -1,20 +1,11 @@
 "use server"
 
-
+import {Property} from "@/types/property";
 import {auth, firestore} from "@/firebase/server";
 import {propertyDataSchema} from "@/validation/propertySchema";
 
-export const createProperty = async (data: {
-    address1: string,
-    address2?: string
-    city: string,
-    postcode: string,
-    price: number,
-    description: string,
-    bedrooms: number,
-    bathrooms: number,
-    status: "draft" | "for-sale" | "withdrawn" | "sold",
-}, authToken: string) => {
+export const updateProperty = async (id: string, data: Property, authToken: string) => {
+    const propertyData = data;
     const verifiedToken = await auth.verifyIdToken(authToken);
 
     if(!verifiedToken.admin) {
@@ -24,7 +15,7 @@ export const createProperty = async (data: {
         }
     }
 
-    const validation = propertyDataSchema.safeParse(data);
+    const validation = propertyDataSchema.safeParse(propertyData);
     if(!validation.success) {
         return {
             error: true,
@@ -32,14 +23,10 @@ export const createProperty = async (data: {
         }
     }
 
-    const property = await firestore.collection("properties").add(
+   await firestore.collection("properties").doc(id).update(
         {
-            ...data,
-            created: new Date(),
+            ...propertyData,
             updated: new Date(),
         });
 
-    return {
-        propertyId: property.id
-    }
 }

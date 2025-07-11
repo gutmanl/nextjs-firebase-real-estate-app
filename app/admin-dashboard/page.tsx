@@ -2,11 +2,13 @@ import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import {PlusCircleIcon} from "lucide-react";
-import {getProperties} from "@/data/properties";
+import PropertiesTable from "@/app/admin-dashboard/properties-table";
 
-export default async function AdminDashboard() {
-   const data = await getProperties();
-   console.log(data);
+export default async function AdminDashboard({
+    searchParams} : {
+    searchParams?:  Promise<any>;
+}   ) {
+    const searchParamsValue = await searchParams;
     return <div>
         <Breadcrumbs items={[{
             label: "Dashboard",
@@ -19,5 +21,6 @@ export default async function AdminDashboard() {
                 <PlusCircleIcon /> New Property
             </Link>
         </Button>
+        <PropertiesTable page={searchParamsValue?.page ? parseInt(searchParamsValue?.page) : 1}/>
     </div>;
 }

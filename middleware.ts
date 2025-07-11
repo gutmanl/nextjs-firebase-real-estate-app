@@ -10,13 +10,22 @@ export async function middleware(request: NextRequest) {
     const cookieStore = await cookies();
     const token = cookieStore.get("firebaseAuthToken")?.value;
 
-    if(!token) {
-        return NextResponse.redirect(new URL("/", request.url))
+    if(request.nextUrl.pathname.startsWith("/login")) {
+        if(token) {
+            return NextResponse.redirect(new URL("/", request.url))
+
+        }
     }
 
-    const decodedToken = decodeJwt(token);
-    if(!decodedToken.admin) {
-        return NextResponse.redirect(new URL("/", request.url))
+    if(request.nextUrl.pathname.startsWith("/admin-dashboard")) {
+        if(!token) {
+            return NextResponse.redirect(new URL("/", request.url))
+        }
+
+        const decodedToken = decodeJwt(token);
+        if(!decodedToken.admin) {
+            return NextResponse.redirect(new URL("/", request.url))
+        }
     }
 
     return NextResponse.next();
@@ -24,6 +33,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/admin-dashboard"
+        "/admin-dashboard", "/admin-dashboard/:path*", "/login"
     ]
 }
