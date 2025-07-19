@@ -3,6 +3,7 @@
 
 import {auth, firestore} from "@/firebase/server";
 import {propertyDataSchema} from "@/validation/propertySchema";
+import {z} from "zod";
 
 export const createProperty = async (data: {
     address1: string,

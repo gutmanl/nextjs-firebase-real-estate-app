@@ -1,7 +1,7 @@
 "use client";
 
 import {useForm} from "react-hook-form";
-import {propertyDataSchema} from "@/validation/propertySchema";
+import {propertySchema} from "@/validation/propertySchema";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
@@ -9,15 +9,16 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import { Button } from "./ui/button";
+import MultiImageUploader, {ImageUpload} from "@/components/multi-image-uploader";
 
 type Props = {
     submitButtonLabel: React.ReactNode;
-    handleSubmit: (data: z.infer<typeof propertyDataSchema>) => void;
-    defaultValues?: z.infer<typeof propertyDataSchema>;
+    handleSubmit: (data: z.infer<typeof propertySchema>) => void;
+    defaultValues?: z.infer<typeof propertySchema>;
 }
 
 export default function PropertyForm({handleSubmit, submitButtonLabel, defaultValues}: Props) {
-    const combinedDefaultValues: z.infer<typeof propertyDataSchema> = {
+    const combinedDefaultValues: z.infer<typeof propertySchema> = {
     ...{
         address1: "",
         address2: "",
@@ -28,12 +29,13 @@ export default function PropertyForm({handleSubmit, submitButtonLabel, defaultVa
         bedrooms: 0,
         bathrooms: 0,
         status: "draft",
+        images: []
     },
         ...defaultValues,
     }
 
-    const form = useForm<z.infer<typeof propertyDataSchema>>({
-        resolver: zodResolver(propertyDataSchema),
+    const form = useForm<z.infer<typeof propertySchema>>({
+        resolver: zodResolver(propertySchema),
         defaultValues: combinedDefaultValues
     });
     return <Form {...form}>
@@ -144,6 +146,25 @@ export default function PropertyForm({handleSubmit, submitButtonLabel, defaultVa
                         )}/>
                 </fieldset>
             </div>
+            <FormField control={form.control} name="images" render={
+                ({field}) => (
+                    <FormItem>
+                        <FormControl>
+                            <MultiImageUploader onImagesChange={(images: ImageUpload[]) => {
+                                form.setValue("images", images);
+                            }}            images={field.value}
+                            urlFormatter={(image) => {
+                                if(!image.file) {
+                                    return `https://firebasestorage.googleapis.com/v0/b/nextjs-15-and-firebase-6d96e.firebasestorage.app/o/${
+                                        encodeURIComponent(image.url)}?alt=media`;
+                                }
+                                return image.url;
+                            }}/>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}/>
+
             <Button type="submit" className="max-w-md mx-auto mt-2 w-full flex gap-2"
                     disabled={form.formState.isSubmitting}>
                 {submitButtonLabel}</Button>
