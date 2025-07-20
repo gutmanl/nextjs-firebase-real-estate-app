@@ -15,11 +15,12 @@ const variant: {[key: string]: "primary" | "destructive" | "secondary" | "succes
     "sold": "success",
 }
 
-export default function PropertyStatusBadge ({status} : {
-    status: PropertyStatus
+export default function PropertyStatusBadge ({status, className} : {
+    status: PropertyStatus,
+    className?: string
 }){
     const label = statusLabel[status];
-    return <Badge variant={variant[status]}>
+    return <Badge variant={variant[status]} className={className}>
         {label}
     </Badge>
 }
