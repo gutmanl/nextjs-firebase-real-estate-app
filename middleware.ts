@@ -13,23 +13,36 @@ export async function middleware(request: NextRequest) {
     if(["/login", "/register"].some(path => request.nextUrl.pathname.startsWith(path))) {
         if(token) {
             return NextResponse.redirect(new URL("/", request.url))
-
         }
     }
 
-    if(request.nextUrl.pathname.startsWith("/admin-dashboard")) {
+    if(["/admin-dashboard", "/account"].some(path => request.nextUrl.pathname.startsWith(path))) {
         if(!token) {
             return NextResponse.redirect(new URL("/", request.url))
         }
 
-        const decodedToken = decodeJwt(token);
+    }
+    if(["/property-search"].some(path => request.nextUrl.pathname.startsWith(path))) {
+        if(!token) {
+            return NextResponse.next()
+        }
+    }
+
+    if(["/admin-dashboard", "/account", "/property-search"].some(path => request.nextUrl.pathname.startsWith(path))) {
+        //We checked the token's existence in the blocks right above. The IDE just isn't smart enough
+        //to recognize that
+        const decodedToken = decodeJwt(token ?? "");
 
         if(decodedToken.exp && (decodedToken.exp - 300) * 1000 < Date.now()) {
             return NextResponse.redirect(new URL("/api/refresh-token?redirect=" +
                 encodeURIComponent(request.nextUrl.pathname), request.url));
         }
 
-        if(!decodedToken.admin) {
+        if(!decodedToken.admin && request.nextUrl.pathname.startsWith("/admin-dashboard")) {
+            return NextResponse.redirect(new URL("/", request.url))
+        }
+
+        if(decodedToken.admin && request.nextUrl.pathname.startsWith("/account/my-favourites")) {
             return NextResponse.redirect(new URL("/", request.url))
         }
     }
@@ -39,6 +52,12 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/admin-dashboard", "/admin-dashboard/:path*", "/login", "/register"
+        "/admin-dashboard",
+        "/admin-dashboard/:path*",
+        "/login",
+        "/register",
+        "/account",
+        "/account/:path*",
+        "/property-search"
     ]
 }
