@@ -1,7 +1,7 @@
 "use client"
 
 import {createContext, useContext, useEffect, useState} from "react";
-import {ParsedToken, User} from "@firebase/auth";
+import {ParsedToken, signInWithEmailAndPassword, User} from "@firebase/auth";
 import {auth} from "@/firebase/client";
 import {GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 import {removeToken, setToken} from "@/context/actions";
@@ -10,6 +10,7 @@ type AuthContextType = {
     currentUser: User | null;
     logout: () => Promise<void>;
     loginWithGoogle: () => Promise<void>;
+    loginWithEmailAndPassword: (email: string, password: string) => Promise<void>;
     customClaims: ParsedToken | null;
 }
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -54,11 +55,16 @@ export const AuthProvider = ({children} :{
         await signInWithPopup(auth, provider);
     }
 
+    const loginWithEmail = async (email: string, password: string) => {
+        await signInWithEmailAndPassword(auth, email, password)
+    }
+
     return (
         <AuthContext.Provider value={{
             currentUser,
             logout,
             loginWithGoogle,
+            loginWithEmailAndPassword: loginWithEmail,
             customClaims
         }}>
             {children}

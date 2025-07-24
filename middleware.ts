@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
     const cookieStore = await cookies();
     const token = cookieStore.get("firebaseAuthToken")?.value;
 
-    if(request.nextUrl.pathname.startsWith("/login")) {
+    if(["/login", "/register"].some(path => request.nextUrl.pathname.startsWith(path))) {
         if(token) {
             return NextResponse.redirect(new URL("/", request.url))
 
@@ -23,6 +23,12 @@ export async function middleware(request: NextRequest) {
         }
 
         const decodedToken = decodeJwt(token);
+
+        if(decodedToken.exp && (decodedToken.exp - 300) * 1000 < Date.now()) {
+            return NextResponse.redirect(new URL("/api/refresh-token?redirect=" +
+                encodeURIComponent(request.nextUrl.pathname), request.url));
+        }
+
         if(!decodedToken.admin) {
             return NextResponse.redirect(new URL("/", request.url))
         }
@@ -33,6 +39,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/admin-dashboard", "/admin-dashboard/:path*", "/login"
+        "/admin-dashboard", "/admin-dashboard/:path*", "/login", "/register"
     ]
 }

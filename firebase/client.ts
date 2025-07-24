@@ -4,8 +4,10 @@ import { Auth, getAuth } from "firebase/auth";
 import { FirebaseStorage, getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
+const apiKey = "AIzaSyDMvNeFvnFKWA97PX_cvCOX_vKqewmy58E";
+
 const firebaseConfig = {
-    apiKey: "AIzaSyDMvNeFvnFKWA97PX_cvCOX_vKqewmy58E",
+    apiKey: apiKey,
     authDomain: "nextjs-15-and-firebase-6d96e.firebaseapp.com",
     projectId: "nextjs-15-and-firebase-6d96e",
     storageBucket: "nextjs-15-and-firebase-6d96e.firebasestorage.app",
@@ -24,5 +26,5 @@ const app =
 const auth: Auth = getAuth(app);
 const storage: FirebaseStorage = getStorage(app);
 
-export { auth, storage };
+export { auth, storage, apiKey };
 

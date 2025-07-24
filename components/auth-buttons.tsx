@@ -33,7 +33,7 @@ export default function AuthButtons() {
                     />
                           )
                       }
-                    <AvatarFallback>
+                    <AvatarFallback className={"text-sky-950"}>
                         {(auth.currentUser.displayName || auth.currentUser.email )?.charAt(0)?.toUpperCase()}
                     </AvatarFallback>
                   </Avatar>

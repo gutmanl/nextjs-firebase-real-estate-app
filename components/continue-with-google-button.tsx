@@ -9,10 +9,14 @@ export default function ContinueWithGoogleButton() {
     const router = useRouter();
     return (
         <Button onClick={async () => {
-            await auth?.loginWithGoogle();
-            router.refresh();
+            try {
+                await auth?.loginWithGoogle();
+                router.refresh();
+            }
+            catch(_) {/* This is just to prevent a runtime error when the Google pop up is closed
+             without a successful login*/}
         }}
-        variant="default" className="w-full">
+        variant="outline" className="w-full">
             Continue with Google
         </Button>
     );
