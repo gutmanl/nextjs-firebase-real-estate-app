@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
     const cookieStore = await cookies();
     const token = cookieStore.get("firebaseAuthToken")?.value;
 
-    if(["/login", "/register"].some(path => request.nextUrl.pathname.startsWith(path))) {
+    if(["/login", "/register", "/forgot-password"].some(path => request.nextUrl.pathname.startsWith(path))) {
         if(token) {
             return NextResponse.redirect(new URL("/", request.url))
         }
@@ -58,6 +58,7 @@ export const config = {
         "/register",
         "/account",
         "/account/:path*",
-        "/property-search"
+        "/property-search",
+        "/forgot-password"
     ]
 }

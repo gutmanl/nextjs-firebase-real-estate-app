@@ -1,6 +1,6 @@
 import z from "zod";
 
-const passwordSchema = z.string().refine(
+export const passwordSchema = z.string().refine(
     (password) => {
         const regex =
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
